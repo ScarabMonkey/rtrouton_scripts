@@ -1,5 +1,5 @@
 #!/bin/bash
- 
+
 # For the SearchDomains variable, change the search domains
 # to be the ones you need, separated by spaces. For example,
 # if you needed to set verizon.com and comcast.com as DNS
@@ -7,12 +7,12 @@
 #
 # SearchDomains="verizon.com comcast.com"
 #
- 
-SearchDomains="demo.com int.demo.com ext.demo.com other.com"
+
+SearchDomains="mrc-mbu.cam.ac.uk ad.mrc-mbu.cam.ac.uk servers.mrc-mbu.cam.ac.uk"
 
 
-# Have the Mac scan for and register 
-# any new network hardware that has 
+# Have the Mac scan for and register
+# any new network hardware that has
 # not already registered.
 
 /usr/sbin/networksetup -detectnewhardware

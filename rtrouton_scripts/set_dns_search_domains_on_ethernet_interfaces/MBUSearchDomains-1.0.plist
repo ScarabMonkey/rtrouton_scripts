@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>_metadata</key>
+	<dict>
+		<key>created_by</key>
+		<string>merlin</string>
+		<key>creation_date</key>
+		<date>2017-11-22T11:37:20Z</date>
+		<key>munki_version</key>
+		<string>3.1.0.3430</string>
+		<key>os_version</key>
+		<string>10.12.6</string>
+	</dict>
+	<key>autoremove</key>
+	<false/>
+	<key>catalogs</key>
+	<array>
+		<string>testing</string>
+	</array>
+	<key>installcheck_script</key>
+	<string>#!/bin/bash
+
+# For the SearchDomains variable, change the search domains
+# to be the ones you need, separated by spaces. For example,
+# if you needed to set verizon.com and comcast.com as DNS
+# search domains, SearchDomains would be set like this:
+#
+# SearchDomains="verizon.com comcast.com"
+#
+
+SearchDomains="mrc-mbu.cam.ac.uk ad.mrc-mbu.cam.ac.uk servers.mrc-mbu.cam.ac.uk"
+
+
+# Have the Mac scan for and register
+# any new network hardware that has
+# not already registered.
+
+#/usr/sbin/networksetup -detectnewhardware
+
+# Save current IFS state
+
+OLDIFS=$IFS
+
+# Change IFS to
+# create newline
+
+IFS=$'\n'
+
+# read all Ethernet interface names into an array
+
+ethernet_interface=($(networksetup -listallnetworkservices | awk '/Ethernet/'))
+
+# restore IFS to previous state
+
+IFS=$OLDIFS
+
+# Get length of the array
+
+tLen=${#ethernet_interface[@]}
+
+# Loops through the list of Ethernet network interfaces
+# available on this Mac and sets the specified DNS search
+# domains on each Ethernet network interface.
+
+for (( i=0; i&lt;${tLen}; i++ ));
+  do
+    #/bin/echo "Getting SearchDomains for "${ethernet_interface[$i]}" on this Mac."
+    #/usr/sbin/networksetup -getsearchdomains "${ethernet_interface[$i]}"
+    /usr/sbin/networksetup -getsearchdomains "${ethernet_interface[$i]}" | grep "ad.mrc-mbu.cam.ac.uk"
+  done
+</string>
+	<key>installer_type</key>
+	<string>nopkg</string>
+	<key>minimum_os_version</key>
+	<string>10.4.0</string>
+	<key>name</key>
+	<string>MBUSearchDomains</string>
+	<key>postinstall_script</key>
+	<string>#!/bin/bash
+
+# For the SearchDomains variable, change the search domains
+# to be the ones you need, separated by spaces. For example,
+# if you needed to set verizon.com and comcast.com as DNS
+# search domains, SearchDomains would be set like this:
+#
+# SearchDomains="verizon.com comcast.com"
+#
+
+SearchDomains="mrc-mbu.cam.ac.uk ad.mrc-mbu.cam.ac.uk servers.mrc-mbu.cam.ac.uk"
+
+
+# Have the Mac scan for and register
+# any new network hardware that has
+# not already registered.
+
+/usr/sbin/networksetup -detectnewhardware
+
+# Save current IFS state
+
+OLDIFS=$IFS
+
+# Change IFS to
+# create newline
+
+IFS=$'\n'
+
+# read all Ethernet interface names into an array
+
+ethernet_interface=($(networksetup -listallnetworkservices | awk '/Ethernet/'))
+
+# restore IFS to previous state
+
+IFS=$OLDIFS
+
+# Get length of the array
+
+tLen=${#ethernet_interface[@]}
+
+# Loops through the list of Ethernet network interfaces
+# available on this Mac and sets the specified DNS search
+# domains on each Ethernet network interface.
+
+for (( i=0; i&lt;${tLen}; i++ ));
+  do
+     /bin/echo "`date +%Y-%m-%d\ %H:%M:%S`  Setting "${ethernet_interface[$i]}" on this Mac."
+     /usr/sbin/networksetup -setsearchdomains "${ethernet_interface[$i]}" $SearchDomains &gt;/dev/null 2&gt;&amp;1
+
+  done
+
+exit 0
+</string>
+	<key>unattended_install</key>
+	<true/>
+	<key>version</key>
+	<string>1.0</string>
+</dict>
+</plist>
+

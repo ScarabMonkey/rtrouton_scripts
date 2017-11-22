@@ -68,7 +68,7 @@ for (( i=0; i&lt;${tLen}; i++ ));
   do
     #/bin/echo "Getting SearchDomains for "${ethernet_interface[$i]}" on this Mac."
     #/usr/sbin/networksetup -getsearchdomains "${ethernet_interface[$i]}"
-    /usr/sbin/networksetup -getsearchdomains "${ethernet_interface[$i]}" | grep "ad.mrc-mbu.cam.ac.uk"
+    /usr/sbin/networksetup -getsearchdomains "${ethernet_interface[$i]}" | awk '/ad.mrc-mbu.cam.ac.uk/ {exit 1}'
   done
 </string>
 	<key>installer_type</key>
@@ -137,4 +137,3 @@ exit 0
 	<string>1.0</string>
 </dict>
 </plist>
-

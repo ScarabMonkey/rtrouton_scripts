@@ -46,5 +46,5 @@ for (( i=0; i<${tLen}; i++ ));
   do
     #/bin/echo "Getting SearchDomains for "${ethernet_interface[$i]}" on this Mac."
     #/usr/sbin/networksetup -getsearchdomains "${ethernet_interface[$i]}"
-    /usr/sbin/networksetup -getsearchdomains "${ethernet_interface[$i]}" | grep "ad.mrc-mbu.cam.ac.uk"
+    /usr/sbin/networksetup -getsearchdomains "${ethernet_interface[$i]}" | awk '/ad.mrc-mbu.cam.ac.uk/ {exit 1}'
   done
